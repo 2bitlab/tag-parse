@@ -51,10 +51,11 @@ async function run(): Promise<void> {
         runCommond
       }
       console.log('tagName: ', tagName)
+      console.log('tagUrl', tagUrl)
       const ret = await axios({
         method: 'POST',
         headers: {
-          Accept: 'application/vnd.github.v3+json',
+          Accept: 'application/vnd.github+json',
           'content-type': 'application/json',
           Authorization: `Bearer ${githubToken}`
         },
