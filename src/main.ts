@@ -50,7 +50,7 @@ async function run(): Promise<void> {
         pusherName,
         runCommand
       }
-      console.log('tagName: ', tagName)
+      console.log('tagName1111: ', tagName)
       console.log('tagUrl', tagUrl)
       console.log('body', JSON.stringify(tagMessage))
       const ret = await axios({
