@@ -52,6 +52,7 @@ async function run(): Promise<void> {
       }
       console.log('tagName: ', tagName)
       console.log('tagUrl', tagUrl)
+      console.log('body', JSON.stringify(tagMessage))
       const ret = await axios({
         method: 'POST',
         headers: {
