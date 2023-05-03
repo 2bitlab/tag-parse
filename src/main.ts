@@ -24,11 +24,11 @@ async function run(): Promise<void> {
     const topRepository: string = core.getInput('repository')
     const githubToken: string = core.getInput('githubToken')
     const type: string = core.getInput('type')
-    const runCommond: string = core.getInput('runCommond')
+    const runCommand: string = core.getInput('runCommand')
 
     console.log('topRepository:', topRepository)
     console.log('type:', type)
-    console.log('runCommond:', runCommond)
+    console.log('runCommand:', runCommand)
 
     if (type === 'stringify') {
       const branch = getBranchByHead(ref) || getBranchByTag(ref)
@@ -41,14 +41,14 @@ async function run(): Promise<void> {
       const tagUrl = getTagUrl(topRepository || full_name)
       const timesTamp = formatTime(new Date(), '{yy}-{mm}-{dd}-{h}-{i}-{s}')
 
-      const tagName = `${outRepository}/${syncBranch}/${timesTamp}/${runCommond}`
+      const tagName = `${outRepository}/${syncBranch}/${timesTamp}`
       // `release/${timesTamp}&branch=${branch}&syncBranch=${syncBranch}&repository=${outRepository}`
       const tagMessage = {
         branch,
         syncBranch,
         repository: outRepository,
         pusherName,
-        runCommond
+        runCommand
       }
       console.log('tagName: ', tagName)
       console.log('tagUrl', tagUrl)
@@ -83,12 +83,12 @@ async function run(): Promise<void> {
       console.log('syncBranch----', tagBranch)
       console.log('repository----', tagRepository)
       console.log('pusherName----', pusherName)
-      console.log('runCommond----', tagInfo.runCommond)
+      console.log('runCommand----', tagInfo.runCommand)
 
       core.exportVariable('BRANCH', tagBranch)
       core.exportVariable('syncBranch', tagSyncBranch)
       core.exportVariable('REPOSITORY', tagRepository)
-      core.exportVariable('runCommond', tagInfo.runCommond)
+      core.exportVariable('runCommand', tagInfo.runCommand)
     }
   } catch (error) {
     const e: any = error
