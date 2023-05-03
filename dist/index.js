@@ -59,10 +59,10 @@ function run() {
             const topRepository = core.getInput('repository');
             const githubToken = core.getInput('githubToken');
             const type = core.getInput('type');
-            const runCommond = core.getInput('runCommond');
+            const runCommand = core.getInput('runCommand');
             console.log('topRepository:', topRepository);
             console.log('type:', type);
-            console.log('runCommond:', runCommond);
+            console.log('runCommand:', runCommand);
             if (type === 'stringify') {
                 const branch = (0, utils_1.getBranchByHead)(ref) || (0, utils_1.getBranchByTag)(ref);
                 const { repository, pusher } = pushPayload || {};
@@ -72,17 +72,18 @@ function run() {
                 const syncBranch = (0, utils_1.getSyncBranch)(ref);
                 const tagUrl = (0, utils_1.getTagUrl)(topRepository || full_name);
                 const timesTamp = (0, utils_1.formatTime)(new Date(), '{yy}-{mm}-{dd}-{h}-{i}-{s}');
-                const tagName = `${outRepository}/${syncBranch}/${timesTamp}/${runCommond}`;
+                const tagName = `${outRepository}/${syncBranch}/${timesTamp}`;
                 // `release/${timesTamp}&branch=${branch}&syncBranch=${syncBranch}&repository=${outRepository}`
                 const tagMessage = {
                     branch,
                     syncBranch,
                     repository: outRepository,
                     pusherName,
-                    runCommond
+                    runCommand
                 };
-                console.log('tagName: ', tagName);
+                console.log('tagName1111: ', tagName);
                 console.log('tagUrl', tagUrl);
+                console.log('body', JSON.stringify(tagMessage));
                 const ret = yield (0, axios_1.default)({
                     method: 'POST',
                     headers: {
@@ -108,11 +109,11 @@ function run() {
                 console.log('syncBranch----', tagBranch);
                 console.log('repository----', tagRepository);
                 console.log('pusherName----', pusherName);
-                console.log('runCommond----', tagInfo.runCommond);
+                console.log('runCommand----', tagInfo.runCommand);
                 core.exportVariable('BRANCH', tagBranch);
                 core.exportVariable('syncBranch', tagSyncBranch);
                 core.exportVariable('REPOSITORY', tagRepository);
-                core.exportVariable('runCommond', tagInfo.runCommond);
+                core.exportVariable('runCommand', tagInfo.runCommand);
             }
         }
         catch (error) {
