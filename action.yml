@@ -1,11 +1,24 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Build By Tag Parse'
+description: '打tag以及tag解析'
+author: 'Autumn'
+branding:
+  icon: 'git-branch'
+  color: 'green'
 inputs:
-  milliseconds: # change this
+  repository:
+    required: false
+    description: '给模板repository打tag，默认是当前repository'
+  githubToken:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'github仓库的访问权限token'
+  type:
+    required: false
+    description: '当前的类型是parse还是stringify'
+    default: 'parse'
+  runCommond:
+    required: false
+    description: '执行的命令'
+    default: 'build'
 runs:
   using: 'node16'
   main: 'dist/index.js'
