@@ -82,10 +82,11 @@ function run() {
                     runCommond
                 };
                 console.log('tagName: ', tagName);
+                console.log('tagUrl', tagUrl);
                 const ret = yield (0, axios_1.default)({
                     method: 'POST',
                     headers: {
-                        Accept: 'application/vnd.github.v3+json',
+                        Accept: 'application/vnd.github+json',
                         'content-type': 'application/json',
                         Authorization: `Bearer ${githubToken}`
                     },
