@@ -1,7 +1,7 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3109:
+/***/ 9283:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -46,32 +46,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const utils_1 = __nccwpck_require__(1606);
+const utils_1 = __nccwpck_require__(4651);
 const axios_1 = __importDefault(__nccwpck_require__(8757));
 // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
 const ref = github.context.ref;
 const pushPayload = github.context.payload;
-console.log('github-----', github);
-console.log('github.context', github.context);
+console.log("github-----", github);
+console.log("github.context", github.context);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const topRepository = core.getInput('repository');
-            const githubToken = core.getInput('githubToken');
-            const type = core.getInput('type');
-            const runCommand = core.getInput('runCommand');
-            console.log('topRepository:', topRepository);
-            console.log('type:', type);
-            console.log('runCommand:', runCommand);
-            if (type === 'stringify') {
+            const topRepository = core.getInput("repository");
+            const githubToken = core.getInput("githubToken");
+            const type = core.getInput("type");
+            const runCommand = core.getInput("runCommand");
+            const appPath = core.getInput("appPath") || "";
+            console.log("topRepository:", topRepository);
+            console.log("type:", type);
+            console.log("runCommand:", runCommand);
+            console.log("appPath:", appPath);
+            if (type === "stringify") {
                 const branch = (0, utils_1.getBranchByHead)(ref) || (0, utils_1.getBranchByTag)(ref);
                 const { repository, pusher } = pushPayload || {};
                 const { full_name } = repository || {};
                 const { name: pusherName } = pusher || {};
-                const [, outRepository] = full_name.split('/');
+                const [, outRepository] = full_name.split("/");
                 const syncBranch = (0, utils_1.getSyncBranch)(ref);
                 const tagUrl = (0, utils_1.getTagUrl)(topRepository || full_name);
-                const timesTamp = (0, utils_1.formatTime)(new Date(), '{yy}-{mm}-{dd}-{h}-{i}-{s}');
+                const timesTamp = (0, utils_1.formatTime)(new Date(), "{yy}-{mm}-{dd}-{h}-{i}-{s}");
                 const tagName = `${outRepository}/${syncBranch}/${timesTamp}`;
                 // `release/${timesTamp}&branch=${branch}&syncBranch=${syncBranch}&repository=${outRepository}`
                 const tagMessage = {
@@ -79,41 +81,44 @@ function run() {
                     syncBranch,
                     repository: outRepository,
                     pusherName,
-                    runCommand
+                    runCommand,
+                    appPath,
                 };
-                console.log('tagName1111: ', tagName);
-                console.log('tagUrl', tagUrl);
-                console.log('body', JSON.stringify(tagMessage));
+                console.log("tagName1111: ", tagName);
+                console.log("tagUrl", tagUrl);
+                console.log("body", JSON.stringify(tagMessage));
                 const ret = yield (0, axios_1.default)({
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        Accept: 'application/vnd.github+json',
-                        'content-type': 'application/json',
-                        Authorization: `Bearer ${githubToken}`
+                        Accept: "application/vnd.github+json",
+                        "content-type": "application/json",
+                        Authorization: `Bearer ${githubToken}`,
                     },
                     url: tagUrl,
                     data: {
                         tag_name: tagName,
-                        body: JSON.stringify(tagMessage)
-                    }
+                        body: JSON.stringify(tagMessage),
+                    },
                 });
-                console.log('ret------: ', ret.data);
+                console.log("ret------: ", ret.data);
             }
-            if (type === 'parse') {
+            if (type === "parse") {
                 const { release } = pushPayload || {};
                 const { body } = release || {};
                 const tagInfo = JSON.parse(body);
-                console.log('tagInfo: ', tagInfo);
-                const { branch: tagBranch, syncBranch: tagSyncBranch, repository: tagRepository, pusherName } = tagInfo || {};
-                console.log('branch: ', tagSyncBranch);
-                console.log('syncBranch----', tagBranch);
-                console.log('repository----', tagRepository);
-                console.log('pusherName----', pusherName);
-                console.log('runCommand----', tagInfo.runCommand);
-                core.exportVariable('BRANCH', tagBranch);
-                core.exportVariable('syncBranch', tagSyncBranch);
-                core.exportVariable('REPOSITORY', tagRepository);
-                core.exportVariable('runCommand', tagInfo.runCommand);
+                console.log("tagInfo: ", tagInfo);
+                const { branch: tagBranch, syncBranch: tagSyncBranch, repository: tagRepository, pusherName, } = tagInfo || {};
+                console.log("branch: ", tagSyncBranch);
+                console.log("syncBranch----", tagBranch);
+                console.log("repository----", tagRepository);
+                console.log("pusherName----", pusherName);
+                console.log("runCommand----", tagInfo.runCommand);
+                console.log("appPath----", tagInfo.appPath);
+                core.exportVariable("BRANCH", tagBranch);
+                core.exportVariable("SYNC_BRANCH", tagSyncBranch);
+                core.exportVariable("REPOSITORY", tagRepository);
+                core.exportVariable("RUN_COMMAND", tagInfo.runCommand);
+                core.exportVariable("APP_PATH", tagInfo.appPath);
             }
         }
         catch (error) {
@@ -127,7 +132,7 @@ run();
 
 /***/ }),
 
-/***/ 1606:
+/***/ 4651:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -17716,7 +17721,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(9283);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
